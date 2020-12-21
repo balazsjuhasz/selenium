@@ -1,4 +1,5 @@
 from selenium import webdriver
+import time
 
 chrome_browser = webdriver.Chrome('./chromedriver')
 
@@ -6,7 +7,25 @@ chrome_browser.maximize_window()
 chrome_browser.get(
     'https://www.seleniumeasy.com/test/basic-first-form-demo.html')
 
+# Close popup
+time.sleep(1.0)
+lightbox_close_x = chrome_browser.find_element_by_id("at-cv-lightbox-close")
+lightbox_close_x.click()
 
 assert 'Selenium Easy Demo' in chrome_browser.title
-button_text = chrome_browser.find_element_by_class_name('btn-default')
-print(button_text.get_attribute('innerHTML'))
+show_message_button = chrome_browser.find_element_by_class_name('btn-default')
+# print(show_message_button.get_attribute('innerHTML'))
+
+assert 'Show Message' in chrome_browser.page_source
+
+user_message = chrome_browser.find_element_by_id('user-message')
+#user_button2 = chrome_browser.find_element_by_css_selector('#get-input > .btn')
+#print(user_button2)
+user_message.clear()
+user_message.send_keys('I AM EXTRA COOOOL')
+
+show_message_button.click()
+output_message = chrome_browser.find_element_by_id('display')
+
+# Verify if correct message displayed
+assert 'I AM EXTRA COOOOL' in output_message.text
